@@ -4,15 +4,6 @@ public class Fraction {
     private int numerator;
     private int denominator;
 
-    public static int gcd(int num, int den){
-        int tempa = num; int tempb = den;
-        while(tempa != 0 && tempb !=0){
-            int rem = tempa % tempb;
-            tempa = tempb;
-            tempb = rem;
-        }
-        return tempa;
-    }
 
 
 
@@ -48,6 +39,9 @@ public class Fraction {
     }
 
     public String toString(){
+        if(this.denominator == 1){
+            return Integer.toString(this.numerator);
+        }
         return Integer.toString(this.numerator)+"/"+Integer.toString(this.denominator);
     }
 
@@ -57,8 +51,9 @@ public class Fraction {
 
     public Fraction add(Fraction other){
         int commonDenominator = other.getDenominator() * this.getDenominator();
+
         int newNumerator = this.numerator*other.getDenominator() + this.denominator*other.getNumerator();
-        Fraction addFraction = new Fraction(commonDenominator,newNumerator);
+        Fraction addFraction = new Fraction(newNumerator,commonDenominator);
         addFraction.toLowestTerms();
         return addFraction;
     }
@@ -66,7 +61,7 @@ public class Fraction {
     public Fraction subtract(Fraction other){
         int commonDenominator = other.getDenominator() * this.getDenominator();
         int newNumerator = this.numerator*other.getDenominator() - other.getNumerator()*this.denominator;
-        Fraction subFraction = new Fraction(commonDenominator,newNumerator);
+        Fraction subFraction = new Fraction(newNumerator,commonDenominator);
         subFraction.toLowestTerms();
         return subFraction;
     }
@@ -74,15 +69,18 @@ public class Fraction {
     public Fraction multiply(Fraction other){
         int commonDenominator = other.getDenominator() * this.denominator;
         int newNumerator = this.numerator*other.getNumerator();
-        Fraction mulFraction = new Fraction(commonDenominator,newNumerator);
+        Fraction mulFraction = new Fraction(newNumerator,commonDenominator);
         mulFraction.toLowestTerms();
         return mulFraction;
     }
 
     public Fraction divide(Fraction other){
         int commonDenominator = this.denominator * other.getNumerator();
+        if (commonDenominator == 0){
+            return null;
+        }
         int newNumerator = this.numerator * other.getDenominator();
-        Fraction divFraction =new Fraction(commonDenominator,newNumerator);
+        Fraction divFraction =new Fraction(newNumerator,commonDenominator);
         divFraction.toLowestTerms();
         return divFraction;
     }
@@ -101,5 +99,18 @@ public class Fraction {
         int gcd = Fraction.gcd(this.numerator,this.denominator);
         this.numerator = this.numerator/gcd;
         this.denominator = this.denominator/gcd;
+    }
+
+    public static int gcd(int num, int den){
+        if(num == 0){
+            return 1;
+        }
+        int tempa = num; int tempb = den;
+        while(tempa != 0 && tempb !=0){
+            int rem = tempa % tempb;
+            tempa = tempb;
+            tempb = rem;
+        }
+        return tempa;
     }
 }
